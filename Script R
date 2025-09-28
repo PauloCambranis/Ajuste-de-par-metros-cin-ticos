@@ -1,0 +1,46 @@
+df <- data.frame(
+  S = c(0.05,
+        0.10,
+        0.30,
+        0.50,
+        1.00,
+        2.50,
+        5.00,
+        8.00,
+        20.00,
+        30.00),    #  mM
+  v = c(3.0,
+        6.0,
+        17.0,
+        31.0,
+        48.0,
+        101.0,
+        121.0,
+        139.0,
+        152.0,
+        181.0)  # µM/s
+)
+
+# Inicializacion
+Vmax_start <- max(df$v)                  # ≈ meseta de la curva
+Km_start   <- df$S[which.min(abs(df$v - Vmax_start/2))]  #Concentración S a Vmax/2
+
+# Ajuste de curva
+fit <- nls(
+  v ~ (Vmax * S) / (Km + S), # Michaelis-Menten
+  data  = df,
+  start = list(Vmax = Vmax_start, Km = Km_start)
+)
+
+summary(fit)
+coef(fit)       # Estimaciones de parametros
+confint(fit)    # Intervalos de confianza
+
+# Visualizaciones
+plot(df$S, df$v, pch = 16, xlab = "[S]", ylab = "v")
+Sgrid <- seq(min(df$S), max(df$S), length.out = 200)
+lines(Sgrid,
+      with(as.list(coef(fit)), (Vmax * Sgrid)/(Km + Sgrid)))
+
+res <- resid(fit); fitv <- fitted(fit)
+plot(fitv, res); abline(h = 0, lty = 2)
