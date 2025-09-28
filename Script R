@@ -27,12 +27,12 @@ Km_start   <- df$S[which.min(abs(df$v - Vmax_start/2))]  #Concentración S a Vma
 
 # Ajuste de curva
 fit <- nls(
-  v ~ (Vmax * S) / (Km + S), # Michaelis-Menten
+  v ~ (Vmax * S) / (Km + S), # Modelo de Michaelis-Menten, función de S
   data  = df,
   start = list(Vmax = Vmax_start, Km = Km_start)
 )
 
-summary(fit)
+summary(fit)    # Resumen general
 coef(fit)       # Estimaciones de parametros
 confint(fit)    # Intervalos de confianza
 
@@ -40,7 +40,7 @@ confint(fit)    # Intervalos de confianza
 plot(df$S, df$v, pch = 16, xlab = "Concentración de Sustrato [S]", ylab = "Velocidad inicial V0")
 Sgrid <- seq(min(df$S), max(df$S), length.out = 200)
 lines(Sgrid,
-      with(as.list(coef(fit)), (Vmax * Sgrid)/(Km + Sgrid)))
+      with(as.list(coef(fit)), (Vmax * Sgrid)/(Km + Sgrid)))     # Modelo de Michaelis-Menten, función de Sgrid
 
 res <- resid(fit); fitv <- fitted(fit)
 plot(fitv, res); abline(h = 0, lty = 2)
