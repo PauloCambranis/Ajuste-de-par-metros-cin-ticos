@@ -27,7 +27,7 @@ df <- data.frame(
 80.424048,
 67.679290,
 60.597406,
-49.017328
+49.017328,
 34.582125)  # µM/s
 )
 
@@ -47,16 +47,16 @@ fit <- nls(
 # Reportes
 print(summary(fit))
 print(coef(fit))
-print(tryCatch(confint(fit), error=function(e) "confint no disponible"))
+print(tryCatch(confint(fit), error=function(e) "intervalo no disponible"))
 
 # Gráficos
 plot(df$S, df$v, pch=16, xlab="[S]", ylab="v", main="Sustrato inhibidor")
 Sgrid <- seq(min(df$S), max(df$S), length.out = 400)
-parms <- as.list(coef(fit_subinh))
+parms <- as.list(coef(fit))
 lines(Sgrid, with(parms, (Vmax * Sgrid) / (Km + Sgrid + (Sgrid^2)/Ksi)), lwd=2)
 
 # Residuos y pseudo R
-res  <- resid(fit_subinh); yhat <- fitted(fit_subinh); y <- df$v
+res  <- resid(fit); yhat <- fitted(fit); y <- df$v
 plot(yhat, res, pch=16, xlab="v ajustada", ylab="residuo"); abline(h=0,lty=2)
 SSE <- sum(res^2); SST <- sum((y - mean(y))^2); R2 <- 1 - SSE/SST
 cat("R² (substrato inhibidor):", R2, "\n")
