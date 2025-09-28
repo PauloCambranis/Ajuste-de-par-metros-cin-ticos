@@ -21,8 +21,8 @@ df <- data.frame(
         181.0)  # µM/s
 )
 
-# Inicializacion
-Vmax_start <- max(df$v)                  # ≈ meseta de la curva
+# Inicializacion: valores para que el algoritmo pueda comenzar
+Vmax_start <- max(df$v)                  # ≈ meseta de la curva, aproximacion a vmax
 Km_start   <- df$S[which.min(abs(df$v - Vmax_start/2))]  #Concentración S a Vmax/2
 
 # Ajuste de curva
@@ -37,7 +37,7 @@ coef(fit)       # Estimaciones de parametros
 confint(fit)    # Intervalos de confianza
 
 # Visualizaciones
-plot(df$S, df$v, pch = 16, xlab = "[S]", ylab = "v")
+plot(df$S, df$v, pch = 16, xlab = "Concentración de Sustrato [S]", ylab = "Velocidad inicial V0")
 Sgrid <- seq(min(df$S), max(df$S), length.out = 200)
 lines(Sgrid,
       with(as.list(coef(fit)), (Vmax * Sgrid)/(Km + Sgrid)))
