@@ -1,0 +1,28 @@
+# ===== Datos de ejemplo =====
+df <- data.frame(
+  x = c(1,2,3,4,5,6,7,8,9,10),
+  y = c(1.1,2.0,2.9,4.2,5.1,6.2,6.9,8.1,9.2,10.2)
+)
+
+# Regresión
+fit <- lm(y ~ x, data=df)
+
+summary(fit)     # Resumen general
+coef(fit)        # Coeficientes (intercepto y pendiente)
+confint(fit)     # Intervalos de confianza
+
+# Gráfico
+plot(df$x, df$y, pch=16, xlab="x", ylab="y", main="Regresión lineal")
+abline(fit, col="blue", lwd=2)
+
+# Residuos y R
+res  <- resid(fit); fitv <- fitted(fit)
+plot(fitv, res, pch=16, xlab="Valores ajustados", ylab="Residuos")
+abline(h=0, lty=2)
+
+y    <- df$y
+yhat <- fitted(fit)
+SSE  <- sum(res^2)
+SST  <- sum((y - mean(y))^2)
+R2   <- 1 - SSE/SST
+cat("R²:", R2, "\n")
