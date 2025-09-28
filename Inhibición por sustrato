@@ -1,0 +1,52 @@
+df <- data.frame(
+  S = c(0.05,
+        0.10,
+        0.30,
+        0.50,
+        1.00,
+        2.50,
+        5.00,
+        8.00,
+        20.00,
+        30.00),    #  mM
+  v = c(3.0,
+        6.0,
+        17.0,
+        31.0,
+        48.0,
+        101.0,
+        121.0,
+        139.0,
+        152.0,
+        181.0)  # µM/s
+)
+
+# Inicialización de datos
+Vmax_start <- max(df$v)
+Km_start   <- df$S[which.min(abs(df$v - Vmax_start/2))]  # Concentración S a Vmax/2
+Ksi_start  <- max(df$S)  # El sustrato máximo suele ser un buen punto de partida, pero se puede cambiar
+
+# Regresión no lineal
+fit <- nls(
+  v ~ (Vmax * S) / (Km + S + (S^2)/Ksi),
+  data  = df,
+  start = list(Vmax = Vmax_start, Km = Km_start, Ksi = Ksi_start),
+  control = nls.control(maxiter = 200, warnOnly = TRUE)
+)
+
+# Reportes
+print(summary(fit))
+print(coef(fit))
+print(tryCatch(confint(fit), error=function(e) "confint no disponible"))
+
+# Gráficos
+plot(df$S, df$v, pch=16, xlab="[S]", ylab="v", main="Sustrato inhibidor")
+Sgrid <- seq(min(df$S), max(df$S), length.out = 400)
+parms <- as.list(coef(fit_subinh))
+lines(Sgrid, with(parms, (Vmax * Sgrid) / (Km + Sgrid + (Sgrid^2)/Ksi)), lwd=2)
+
+# Residuos y pseudo R
+res  <- resid(fit_subinh); yhat <- fitted(fit_subinh); y <- df$v
+plot(yhat, res, pch=16, xlab="v ajustada", ylab="residuo"); abline(h=0,lty=2)
+SSE <- sum(res^2); SST <- sum((y - mean(y))^2); R2 <- 1 - SSE/SST
+cat("R² (substrato inhibidor):", R2, "\n")
