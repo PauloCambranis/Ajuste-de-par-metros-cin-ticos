@@ -44,3 +44,16 @@ lines(Sgrid,
 
 res <- resid(fit); fitv <- fitted(fit)
 plot(fitv, res); abline(h = 0, lty = 2)
+
+
+# Cálculo de pseudo-R2
+y    <- df$v            # valores observados
+yhat <- fitted(fit)  
+
+SSE  <- sum(res^2)
+SST  <- sum((y - mean(y))^2)
+
+R2   <- 1 - SSE/SST
+
+cat("R2: ", R2)
+              
