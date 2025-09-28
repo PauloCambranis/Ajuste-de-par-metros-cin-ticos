@@ -3,4 +3,17 @@ La regresión no lineal tiene varias ventajas sobre métodos gráficos como Line
 En este repositorio puedes encontrar el script de R para ajustar tu cinética. Sigue estos pasos:
 1. Si no tienes instalado R, puedes ir a una consola en línea como https://rdrr.io/snippets/
 2. Copia y pega en la consola el contenido del archivo Script R de este repositorio.
-3. Reemplaza los valores de muestra con tus propios datos.
+3. Reemplaza los valores de muestra con tus propios datos. Si los pegas de excel, asegúrate de respetar la sintaxis de R:
+```R
+datos <- c(0.1, # la lista se declara con c()
+           0.2, # Cuidado con las comas
+           0.3)
+```
+
+Hay varios scripts en este repositorio para diversos modelos, incluyendo:
+- Cinética enzimática clásica de Michaelis-Menten
+- Cinética enzimática con inhibición
+- Cinética de Monod
+- Regresión Lineal
+
+Más modelos pronto!
