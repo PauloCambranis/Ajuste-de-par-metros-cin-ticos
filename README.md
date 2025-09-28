@@ -17,3 +17,29 @@ Hay varios scripts en este repositorio para diversos modelos, incluyendo:
 - Regresión Lineal
 
 Más modelos pronto!
+
+---
+## Solución de problemas
+### Problemas causados por las comas y los datos de entrada
+Si obtienes alguno de estos errores, verifica que copiaste bien los datos, que les pusiste comas a todos excepto al último, y que son el mismo número de datos,
+
+Falta una coma:
+```R
+Error: unexpected numeric constant in:
+"
+```
+El ultimo elemento tiene una coma:
+```R
+Error in c(0.05, 0.1, 0.3, 0.5, 1, 2.5, 5, 8, 12, 16, 20, 25, 30, 40,  : 
+  argument 16 is empty
+```
+No son el mismo numero de datos
+```R
+arguments imply differing number of rows: 15, 16
+```
+
+### Problemas relacionados al fallo del metodo iterativo
+En el caso del modelo con inhibicion por sustrato, el modelo es muy sensible a los valores de inicializacion y a los datos de entrada. Si los datos no son de unexperimento con inhibicion, es probable que falle con un error que menciona que hay un problema con el calculo de la gradiente, como este:
+```R
+In prof$getProfile() : singular gradient
+```
